@@ -78,7 +78,7 @@ public:
         "barry@adatum.com",
         "treyresearch.net",
         "karen@proseware.com",
-		"man2   man = \"dude\"tertert"
+		"man2   man = \"dude\"tertert "
     };
 
 		//Regex^ emailregex = gcnew Regex("(?<user>[^ =]+)");
