@@ -1,7 +1,10 @@
 #include <string>
+#using <system.dll>
 
+using namespace System;
 
 using namespace std;
+using namespace System::Text::RegularExpressions;
 
 
 //класс атрибутов
