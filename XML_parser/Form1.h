@@ -106,27 +106,12 @@ str1 += (char)str[i];
 return str1;
 }*/
 
-string get_tag(string text, int pos)
-{
-	int start = text.find("<",pos)+1;
-	int end = text.find("/>",pos);
-	text=text.substr(start,end-start);
-	return text;
-}
-string get_attr(string text, int pos)
-{
-	int start = text.find(" ",pos)+1;
-	int end = text.find("=",pos);
-	text=text.substr(start,end-start);  
-	text=text.replace(,"1");
-	return text;
-
-}
 
 
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
 
-				textBox1->Text=gcnew System::String(get_tag("12345<1234asdasd5/>1234567",0).c_str());
+				 textBox1->Text=gcnew System::String(Xml_doc::get_tag("12345<1234asdasd5/>1234567",0).c_str());
+				 textBox1->Text=Xml_doc:: reg();
 
 			 }
 	private: System::Void Form1_Shown(System::Object^  sender, System::EventArgs^  e) {

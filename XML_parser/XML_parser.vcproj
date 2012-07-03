@@ -240,10 +240,6 @@
 				</File>
 			</File>
 			<File
-				RelativePath=".\pcre.h"
-				>
-			</File>
-			<File
 				RelativePath=".\resource.h"
 				>
 			</File>
