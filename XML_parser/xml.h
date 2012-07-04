@@ -1,4 +1,4 @@
-#include <string>
+п»ї#include <string>
 #using <system.dll>
 
 using namespace std;
@@ -6,14 +6,14 @@ using namespace System;
 using namespace System::Text::RegularExpressions;
 
 
-//класс атрибутов
+//РєР»Р°СЃСЃ Р°С‚СЂРёР±СѓС‚РѕРІ
 class Attr{
 public:
-	//имя
+	//РёРјСЏ
 	string name;
-	//значение
+	//Р·РЅР°С‡РµРЅРёРµ
 	string value;
-	//конструктор
+	//РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 	Attr(string n,string v){
 		name=n;
 		value=v;
@@ -21,24 +21,24 @@ public:
 
 };
 
-//класс тегов
+//РєР»Р°СЃСЃ С‚РµРіРѕРІ
 class Tag{
 public:
-	//имя
+	//РёРјСЏ
 	string name;
-	//текст в теге
+	//С‚РµРєСЃС‚ РІ С‚РµРіРµ
 	string value;
-	//закрывающий тег или нет
+	//Р·Р°РєСЂС‹РІР°СЋС‰РёР№ С‚РµРі РёР»Рё РЅРµС‚
 	bool close;
-	//вложенные теги
+	//РІР»РѕР¶РµРЅРЅС‹Рµ С‚РµРіРё
 	Tag *tags;
-	//атрибуты тега
+	//Р°С‚СЂРёР±СѓС‚С‹ С‚РµРіР°
 	Attr *attr;
-	//комментарии к тегу
+	//РєРѕРјРјРµРЅС‚Р°СЂРёРё Рє С‚РµРіСѓ
 	string comments;
-	//весь текст содержащийся в теге
+	//РІРµСЃСЊ С‚РµРєСЃС‚ СЃРѕРґРµСЂР¶Р°С‰РёР№СЃСЏ РІ С‚РµРіРµ
 	string text;
-	//конструктор
+	//РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 	Tag(string n, bool c){
 		name=n;
 		close=c
@@ -49,18 +49,22 @@ public:
 
 
 
-//класс xml
+//РєР»Р°СЃСЃ xml
 class Xml_doc{
 public:
-	//корневой тег
+	//РєРѕСЂРЅРµРІРѕР№ С‚РµРі
 	Tag tag;
-	//атрибуты заголовка
+	//Р°С‚СЂРёР±СѓС‚С‹ Р·Р°РіРѕР»РѕРІРєР°
 	Attr *attr;
-	//заполнение структоры
+	//Р·Р°РїРѕР»РЅРµРЅРёРµ СЃС‚СЂСѓРєС‚РѕСЂС‹
 	int read(string path);
-	//создание xml файла
+	//СЃРѕР·РґР°РЅРёРµ xml С„Р°Р№Р»Р°
 	int create(string path);
-	//конструктор
+	String ^ getTag(void)
+	{
+		return getTag();
+	}
+	//РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 	Xml_doc(void);
 /*
 	static	string get_tag(string text, int pos)
@@ -71,7 +75,8 @@ public:
 		return text;
 	}
 */
-	static String^ getTag()
+private:
+	String^ _getTag()
 	{
 		Regex^ emailregex = gcnew Regex("<(?<tag>[^>]+)");
 		//Regex^ emailregex = gcnew Regex("/*/");
@@ -97,11 +102,9 @@ public:
             text="failed";
         }
     return text;
-
-
-
 	}
-	static String^  reg()
+
+	String^  _reg()
 	{
 		Regex^ emailregex = gcnew Regex("<(?<tag>[^ ]+) (?<attr>[^=]+)=\"(?<value>[^ ]+)\"");
 		//Regex^ emailregex = gcnew Regex("/*/");
