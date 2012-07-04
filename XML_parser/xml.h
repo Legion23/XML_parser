@@ -14,7 +14,6 @@ public:
 	//значение
 	string value;
 	//конструктор
-
 	Attr(string n,string v){
 		name=n;
 		value=v;
@@ -29,6 +28,8 @@ public:
 	string name;
 	//текст в теге
 	string value;
+	//закрывающий тег или нет
+	bool close;
 	//вложенные теги
 	Tag *tags;
 	//атрибуты тега
@@ -38,8 +39,9 @@ public:
 	//весь текст содержащийся в теге
 	string text;
 	//конструктор
-	Tag(string n){
+	Tag(string n, bool c){
 		name=n;
+		close=c
 	}
 
 
@@ -60,7 +62,7 @@ public:
 	int create(string path);
 	//конструктор
 	Xml_doc(void);
-
+/*
 	static	string get_tag(string text, int pos)
 	{
 		int start = text.find("<",pos)+1;
@@ -68,43 +70,61 @@ public:
 		text=text.substr(start,end-start);
 		return text;
 	}
-
-
-	static String^  reg()
+*/
+	static String^ getTag()
 	{
-		array<String^>^ address=
-    {
-        
-        "barry@adatum.com",
-        "treyresearch.net",
-        "karen@proseware.com",
-		"man2   man = \"dude\"tertert "
-    };
-
-		//Regex^ emailregex = gcnew Regex("(?<user>[^ =]+)");
-		Regex^ emailregex = gcnew Regex("/.../");
-	String^ text;
-	
-    for (int i=0; i<address->Length; i++)
-    {
-        Match^ m = emailregex->Match( address[i] );
-        Console::Write("\n{0,25}", address[i]);
-
+		Regex^ emailregex = gcnew Regex("<(?<tag>[^>]+)");
+		//Regex^ emailregex = gcnew Regex("/*/");
+		String^ text;
+		String^ test ="1 <color/> 2 <color> 3 </color>";
+        Match^ m = emailregex->Match( test);
+		text="";
+		text+="String: "+test+" | ";
+		m=m->NextMatch();
+		m=m->NextMatch();
         if ( m->Success ) 
         {
 
-			text=m->Groups["user"]->Value;
-			//text="dsfsdf";
+			//text=m->Groups["user"]->Value;
+			
+			text+="tag: "+m->Groups["tag"]->Value;
+			
+			//text="ok";
 			//text->Insert(5, m->Groups["value"]->Value);
 
         }
-        else 
-            Console::Write("   (invalid email address)");
+		else {
+            text="failed";
         }
+    return text;
 
-    Console::WriteLine("");
-	//text.Insert(1,"test");
-	
+
+
+	}
+	static String^  reg()
+	{
+		Regex^ emailregex = gcnew Regex("<(?<tag>[^ ]+) (?<attr>[^=]+)=\"(?<value>[^ ]+)\"");
+		//Regex^ emailregex = gcnew Regex("/*/");
+		String^ text;
+		String^ test ="asdasd <color red=\"00FF00\" green=\"FF0000\" > asdasdasd";
+        Match^ m = emailregex->Match( test);
+		text="";
+		text+="String: "+test+" | ";
+        if ( m->Success ) 
+        {
+
+			//text=m->Groups["user"]->Value;
+			
+			text+="tag: "+m->Groups["tag"]->Value+" | ";
+			text+="attr: "+m->Groups["attr"]->Value+" | ";
+			text+="value: "+m->Groups["value"]->Value+" | ";
+			//text="ok";
+			//text->Insert(5, m->Groups["value"]->Value);
+
+        }
+		else {
+            text="failed";
+        }
     return text;
 	}
 
@@ -117,15 +137,16 @@ public:
 		return text;
 
 	}
-
+/*
 private:
 	string get_tag(string text)
 	{
 		int start=text.find('<');
 		int end=text.find('\>');
+		return "ok";
 	}
 
-
+*/
 }; 
 
 
@@ -136,9 +157,9 @@ private:
 
 
 
-string n="data";
-string v="1234";
-Attr atrreb(n,v);
-Xml_doc xml1();
+//string n="data";
+//string v="1234";
+//Attr atrreb(n,v);
+//Xml_doc xml1();
 
 

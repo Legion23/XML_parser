@@ -45,6 +45,7 @@ namespace XML_parser {
 	private: System::Windows::Forms::Button^  button1;
 	protected: 
 	private: System::Windows::Forms::TextBox^  textBox1;
+	private: System::Windows::Forms::TreeView^  treeView1;
 
 	private:
 		/// <summary>
@@ -61,6 +62,7 @@ namespace XML_parser {
 		{
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->treeView1 = (gcnew System::Windows::Forms::TreeView());
 			this->SuspendLayout();
 			// 
 			// button1
@@ -81,11 +83,19 @@ namespace XML_parser {
 			this->textBox1->Size = System::Drawing::Size(347, 218);
 			this->textBox1->TabIndex = 1;
 			// 
+			// treeView1
+			// 
+			this->treeView1->Location = System::Drawing::Point(12, 236);
+			this->treeView1->Name = L"treeView1";
+			this->treeView1->Size = System::Drawing::Size(198, 42);
+			this->treeView1->TabIndex = 2;
+			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(369, 291);
+			this->ClientSize = System::Drawing::Size(368, 283);
+			this->Controls->Add(this->treeView1);
 			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->button1);
 			this->Name = L"Form1";
@@ -110,12 +120,12 @@ return str1;
 
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
 
-				 textBox1->Text=gcnew System::String(Xml_doc::get_tag("12345<1234asdasd5/>1234567",0).c_str());
-				 textBox1->Text=Xml_doc:: reg();
+				 //textBox1->Text=gcnew System::String(Xml_doc::get_tag("12345<1234asdasd5/>1234567",0).c_str());
+				 textBox1->Text=Xml_doc:: getTag();
 
 			 }
 	private: System::Void Form1_Shown(System::Object^  sender, System::EventArgs^  e) {
-			
+		textBox1->Text=Xml_doc:: getTag();			
 	
 			 }
 	};
