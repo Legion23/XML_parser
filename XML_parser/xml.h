@@ -1,11 +1,18 @@
 ﻿#include <string>
+#include <fstream>
+#include <vector>
+#include < list>  
 #using <system.dll>
 
 using namespace std;
 using namespace System;
+using namespace System::Windows::Forms;
+using namespace Runtime::InteropServices;
 using namespace System::Text::RegularExpressions;
 
 
+
+     
 //класс атрибутов
 class Attr{
 public:
@@ -22,7 +29,7 @@ public:
 };
 
 //класс тегов
-class Tag{
+class xml_Tag{
 public:
 	//имя
 	string name;
@@ -31,7 +38,7 @@ public:
 	//закрывающий тег или нет
 	bool close;
 	//вложенные теги
-	Tag *tags;
+	list <xml_Tag> tags;
 	//атрибуты тега
 	Attr *attr;
 	//комментарии к тегу
@@ -39,69 +46,151 @@ public:
 	//весь текст содержащийся в теге
 	string text;
 	//конструктор
-	Tag(string n, bool c){
-		name=n;
-		close=c
+	
+	xml_Tag(void){
+		/*
+	name=n;
+	close=c;
+	*/
 	}
-
+	
 
 };
-
 
 
 //класс xml
 class Xml_doc{
 public:
 	//корневой тег
-	Tag tag;
+	xml_Tag *root;
 	//атрибуты заголовка
 	Attr *attr;
 	//заполнение структоры
 	int read(string path);
+	//содержание xml файла
+	string file;
+	int lastInxdex;
 	//создание xml файла
-	int create(string path);
-	String ^ getTag(void)
+	int XML(string path);
+
+	String^ getTag(void)
 	{
 		return getTag();
 	}
-	//конструктор
-	Xml_doc(void);
-/*
-	static	string get_tag(string text, int pos)
+	void readFile(void)
 	{
-		int start = text.find("<",pos)+1;
-		int end = text.find("/>",pos);
-		text=text.substr(start,end-start);
-		return text;
+		_readFile("D:/test.xml");
+	}
+	void parse(void)
+	{
+		_parse();
+	}
+	//конструктор
+	Xml_doc(void){
+		this->root-> name="xml";
+		this->lastInxdex=0;
+		this->readFile();
+	}
+	static System::String^ convertStrToChar(std::string str)
+	{
+		return gcnew System::String(str.c_str());
+	}
+private:
+	 
+
+	static const std::string SysToStd(System::String^ SysStr){
+	char *v = (char*) (Marshal::StringToHGlobalAnsi(SysStr)).ToPointer() ;
+	std::string result = std::string(v);
+	Marshal::FreeHGlobal(System::IntPtr((void*)v));
+	return result;
+	}
+/*
+	string getelems(Tag tag)
+	{
+		string text="";
+		for (int i=0;i<tag.tag.s;i++)
+		{
+
+		}
+
 	}
 */
-private:
-	String^ _getTag()
+	int _readFile(string Path){
+		ifstream input_file(Path.c_str(), ios::in|ios::binary );
+		//MessageBox(NULL,"ghbdtnb","dsfdf",MB_OK);
+		if(!input_file)
+		{
+			//MessageBox::Show("Can't open file "+convertStrToChar(Path));
+			return -1;
+		}
+		char line[1024]; 
+		while (!input_file.eof())
+
+		{ 
+			input_file.getline(line, sizeof(line)); 
+			this->file.append(line);
+			this->file.append("\n"); 
+		} 
+		input_file.close();
+		//infile>>this->file;
+		return 0;
+	}
+		
+
+	int _parse()
+	{
+		_getTag(this->root,this->lastInxdex);
+		return 0;
+	}
+
+
+
+	int _getTag(xml_Tag *root, int start=0)
 	{
 		Regex^ emailregex = gcnew Regex("<(?<tag>[^>]+)");
+		//Regex^ emailregex = gcnew Regex("<(?<tag>[^ ]+) (?<attr>[^=]+)=\"(?<value>[^ ]+)\"");
 		//Regex^ emailregex = gcnew Regex("/*/");
-		String^ text;
-		String^ test ="1 <color/> 2 <color> 3 </color>";
-        Match^ m = emailregex->Match( test);
-		text="";
-		text+="String: "+test+" | ";
-		m=m->NextMatch();
-		m=m->NextMatch();
-        if ( m->Success ) 
-        {
+		//String^ text;
+		//String^ test ="1 <color/> 2 <color> 3 </color>";
+		//MessageBox::Show("Start parse");
+		Match^ m = emailregex->Match( gcnew System::String(this->file.c_str()),start+1);
+		//text="";
+		//text+="String: "+gcnew System::String(this->file.c_str())+" | ";
+		if ( m->Success ) 
+		{
 
 			//text=m->Groups["user"]->Value;
+			//MessageBox::Show(m->Groups["tag"]->Value->ToString());
+			String ^ text_tag=m->Groups["tag"]->Value;
+			//MessageBox::Show(text_tag->Length.ToString());
+			//MessageBox::Show(text_tag->Substring(text_tag->Length-1,1));
+			if(text_tag->Substring(text_tag->Length-2,1)!=""){
 			
-			text+="tag: "+m->Groups["tag"]->Value;
-			
+			xml_Tag *tag1;
+			tag1->name=SysToStd(m->Groups["tag"]->Value);
+			MessageBox::Show("begin add "+convertStrToChar( tag1->name));
+			root->tags.push_back(*tag1);
+			MessageBox::Show("Added "+m->Groups["tag"]->Value);
+			//MessageBox::Show("Element added");
+			if( lastInxdex<m->Index) _getTag(this->root,m->Index);
+			}
+			else
+			{
+			  return 0;
+			}
+			//MessageBox::Show(m->Index.ToString());
+			m->NextMatch();
+			//return m->Index;
+
 			//text="ok";
 			//text->Insert(5, m->Groups["value"]->Value);
 
-        }
-		else {
-            text="failed";
-        }
-    return text;
+		}
+		
+		//MessageBox::Show("fail");
+		return m->Index;
+		
+		
 	}
 
 	String^  _reg()
@@ -110,46 +199,29 @@ private:
 		//Regex^ emailregex = gcnew Regex("/*/");
 		String^ text;
 		String^ test ="asdasd <color red=\"00FF00\" green=\"FF0000\" > asdasdasd";
-        Match^ m = emailregex->Match( test);
+		Match^ m = emailregex->Match( test);
 		text="";
 		text+="String: "+test+" | ";
-        if ( m->Success ) 
-        {
+		if ( m->Success ) 
+		{
 
 			//text=m->Groups["user"]->Value;
-			
+
 			text+="tag: "+m->Groups["tag"]->Value+" | ";
 			text+="attr: "+m->Groups["attr"]->Value+" | ";
 			text+="value: "+m->Groups["value"]->Value+" | ";
 			//text="ok";
 			//text->Insert(5, m->Groups["value"]->Value);
 
-        }
+		}
 		else {
-            text="failed";
-        }
-    return text;
-	}
-
-	string get_attr(string text, int pos)
-	{
-		int start = text.find(" ",pos)+1;
-		int end = text.find("=",pos);
-		text=text.substr(start,end-start);  
-		//text=text.replace(,"1");
+			text="failed";
+		}
 		return text;
-
-	}
-/*
-private:
-	string get_tag(string text)
-	{
-		int start=text.find('<');
-		int end=text.find('\>');
-		return "ok";
 	}
 
-*/
+	
+	
 }; 
 
 
@@ -164,5 +236,4 @@ private:
 //string v="1234";
 //Attr atrreb(n,v);
 //Xml_doc xml1();
-
 

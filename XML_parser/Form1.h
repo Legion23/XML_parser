@@ -67,11 +67,11 @@ namespace XML_parser {
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(216, 236);
+			this->button1->Location = System::Drawing::Point(388, 236);
 			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(143, 42);
+			this->button1->Size = System::Drawing::Size(143, 174);
 			this->button1->TabIndex = 0;
-			this->button1->Text = L"Анализировать";
+			this->button1->Text = L"Выход";
 			this->button1->UseVisualStyleBackColor = true;
 			this->button1->Click += gcnew System::EventHandler(this, &Form1::button1_Click);
 			// 
@@ -80,21 +80,21 @@ namespace XML_parser {
 			this->textBox1->Location = System::Drawing::Point(12, 12);
 			this->textBox1->Multiline = true;
 			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(347, 218);
+			this->textBox1->Size = System::Drawing::Size(519, 218);
 			this->textBox1->TabIndex = 1;
 			// 
 			// treeView1
 			// 
 			this->treeView1->Location = System::Drawing::Point(12, 236);
 			this->treeView1->Name = L"treeView1";
-			this->treeView1->Size = System::Drawing::Size(198, 42);
+			this->treeView1->Size = System::Drawing::Size(370, 174);
 			this->treeView1->TabIndex = 2;
 			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(368, 283);
+			this->ClientSize = System::Drawing::Size(543, 422);
 			this->Controls->Add(this->treeView1);
 			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->button1);
@@ -106,27 +106,48 @@ namespace XML_parser {
 
 		}
 #pragma endregion
-/*
-private: std::string sysstr2str(System::String ^str)
-{
-std::string str1 = "";
-for (int i = 0; i < str->Length; i++)
-str1 += (char)str[i];
 
-return str1;
-}*/
 
 
 
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
 
-				 //textBox1->Text=gcnew System::String(Xml_doc::get_tag("12345<1234asdasd5/>1234567",0).c_str());
-				 textBox1->Text=Xml_doc:: getTag();
+				 Close();
 
 			 }
+			 int genTree(xml_Tag *tag){
+
+				 if( tag->tags.empty()) MessageBox::Show("No tags");
+
+				 // пройдём по списку в цикле
+
+				 for(list<xml_Tag>::iterator  i = tag->tags.begin();  i != tag->tags.end(); i++)
+				 {
+
+					 MessageBox::Show("Start");
+					 String^ x;
+					 x=Xml_doc::convertStrToChar( i->name );
+					 //treeView1->Nodes->Add(x); 
+					 MessageBox::Show(x);
+
+					 if(i->tags.empty())
+					 {
+						 xml_Tag *tag2;
+						 tag2->tags=i->tags;
+						 genTree(tag2);
+					 }
+				 }
+
+				 return 0;
+			 }
+
 	private: System::Void Form1_Shown(System::Object^  sender, System::EventArgs^  e) {
-		textBox1->Text=Xml_doc:: getTag();			
-	
+				 //textBox1->Text=Xml_doc:: getTag();			
+				 Xml_doc xml1;
+				 textBox1->Text=gcnew System::String(xml1.file.c_str());
+				 treeView1->Nodes->Add("dsfsdfsdf");
+				 xml1.parse();
+				 genTree(xml1.root);
 			 }
 	};
 }

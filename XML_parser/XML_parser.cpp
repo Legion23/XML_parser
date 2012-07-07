@@ -1,5 +1,4 @@
 // XML_parser.cpp: главный файл проекта.
-
 #include "stdafx.h"
 #include "Form1.h"
 
